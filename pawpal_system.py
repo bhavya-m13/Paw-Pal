@@ -1,21 +1,31 @@
 from dataclasses import dataclass, field
 from datetime import datetime
+from enum import Enum
+
+
+class Priority(Enum):
+    LOW = 1
+    MEDIUM = 2
+    HIGH = 3
 
 
 @dataclass
 class Task:
     id: str
+    pet_id: str
     title: str
     description: str
     due_date: datetime
     category: str
     is_completed: bool
-    priority: str
+    priority: Priority
+    completed_at: datetime | None = None
 
 
 @dataclass
 class Pet:
     id: str
+    owner_id: str
     name: str
     species: str
     breed: str
@@ -25,7 +35,7 @@ class Pet:
     def add_task(self, task: Task) -> None:
         pass
 
-    def remove_task(self, task_id: str) -> None:
+    def remove_task(self, task_id: str) -> bool:
         pass
 
     def get_tasks(self) -> list[Task]:
@@ -43,7 +53,7 @@ class Owner:
     def add_pet(self, pet: Pet) -> None:
         pass
 
-    def remove_pet(self, pet_id: str) -> None:
+    def remove_pet(self, pet_id: str) -> bool:
         pass
 
     def get_pets(self) -> list[Pet]:
@@ -51,8 +61,9 @@ class Owner:
 
 
 class Scheduler:
-    def __init__(self, owner: Owner):
-        self.owner = owner
+    def __init__(self, owners: list[Owner]):
+        self.owners = owners
+        self._task_cache: list[Task] = []
 
     def get_tasks_by_pet(self, pet_id: str) -> list[Task]:
         pass
@@ -73,4 +84,7 @@ class Scheduler:
         pass
 
     def get_upcoming_tasks(self, days: int) -> list[Task]:
+        pass
+
+    def _rebuild_cache(self) -> None:
         pass

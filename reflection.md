@@ -8,6 +8,7 @@ In this project, a user should be able to enter information about themselves and
 
 - Briefly describe your initial UML design.
 - What classes did you include, and what responsibilities did you assign to each?
+
 For my main design, I think I want to include 4 classes: Owners, Pets, Tasks, and Scheduling. 
 Owner will include: the name of the owner and a list of pets attached to that owner. Owners will be able to add_pet() and get_tasks(). 
 Pets will include: name of pet, breed/species, list of tasks needed to be completed for pet. Pets will need tasks, so I will use add_task() and remove_task(). 
@@ -18,6 +19,11 @@ Finally, the scheduler will be responsible for sorting tasks, checking if there 
 
 - Did your design change during implementation?
 - If yes, describe at least one change and why you made it.
+
+Yes. I asked Claude to review my skeleton and asked if  it notices any missing relationships or potential logic bottlenecks. Here is what AI suggested: 
+1. priority enum should be added to sort by priority of tasks 
+2. Task.pet_id will re-associate a task with it's pet after flattening
+3. remove_task and remove_pet should be bool so that callers can tell if the ID was actually found. 
 
 ---
 
