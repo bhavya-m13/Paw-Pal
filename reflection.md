@@ -4,8 +4,15 @@
 
 **a. Initial design**
 
+In this project, a user should be able to enter information about themselves and their pet for the program to keep as user input. Users should also be able to add and/or modify tasks. Example of a task could be scheduling a morning walk for their pet at a specific time. Finally, users should also be able to view a chronological list of all pending tasks across all pets for the current day. 
+
 - Briefly describe your initial UML design.
 - What classes did you include, and what responsibilities did you assign to each?
+For my main design, I think I want to include 4 classes: Owners, Pets, Tasks, and Scheduling. 
+Owner will include: the name of the owner and a list of pets attached to that owner. Owners will be able to add_pet() and get_tasks(). 
+Pets will include: name of pet, breed/species, list of tasks needed to be completed for pet. Pets will need tasks, so I will use add_task() and remove_task(). 
+Tasks will include: description of task, time task must be completed at, frequence of the task, and whether or not it is completed. I can use, for example, task_complete() to determine whether it's finished or not. 
+Finally, the scheduler will be responsible for sorting tasks, checking if there are any timing conflicts, and printing a chronological view of all tasks per pet. I can use sort_tasks(), check_times(), and daily_view() as methods for those. 
 
 **b. Design changes**
 
