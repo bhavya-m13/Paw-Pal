@@ -22,6 +22,39 @@ Your final app should:
 - Display the plan clearly (and ideally explain the reasoning)
 - Include tests for the most important scheduling behaviors
 
+## Features
+
+### Pet & Owner Management
+- **Add / remove pets** — Register multiple pets under one owner; each pet maintains its own independent task list.
+- **Per-pet task lists** — Tasks are stored on the `Pet` object and referenced by `pet_id`, keeping ownership explicit even after the scheduler flattens everything into a single cache.
+
+### Task Scheduling
+- **One-time tasks** — Schedule any care activity (walk, feeding, medication, grooming, etc.) with a title, category, due date/time, and priority level.
+- **Priority levels** — Every task carries a `LOW / MEDIUM / HIGH` priority (backed by a `Priority` enum) so high-urgency care is never buried in the list.
+
+### Sorting Algorithms
+- **Sort by time-of-day** — `sort_by_time()` extracts the `HH:MM` portion of each task's `due_date` and sorts ascending using zero-padded 24-hour strings, producing a clean chronological view of the day regardless of what date each task falls on.
+- **Sort by due date** — `sort_by_due_date()` sorts by the full `datetime`, useful when displaying tasks across multiple days.
+- **Sort by priority** — `sort_by_priority()` orders tasks from `HIGH` → `LOW` so the most urgent items always surface first.
+
+### Filtering
+- **Filter by pet name** — `filter_by_pet_name()` resolves the name to a set of pet IDs first (case-insensitive), then filters in O(1) per task — no repeated string comparisons across a growing list.
+- **Filter by completion status** — `filter_by_completion()` isolates either pending or finished tasks, powering the Incomplete / Completed / All toggle in the UI.
+- **Filter by category** — `filter_by_category()` narrows results to a single care type (e.g., Medication only).
+
+### Recurring Tasks
+- **Daily recurrence** — Marking a daily task complete automatically clones it with `due_date + timedelta(days=1)`, preserving the original time-of-day slot.
+- **Weekly recurrence** — Same mechanism with `due_date + timedelta(weeks=1)`.
+- **Infinite chaining** — Each generated task inherits `frequency`, so the chain continues indefinitely without manual re-entry.
+
+### Conflict Detection
+- **Duplicate-time warnings** — `get_conflicts()` groups tasks into `YYYY-MM-DD HH:MM` buckets. Any bucket with two or more tasks generates a human-readable warning: `[CONFLICT] 2026-04-01 08:00 — 'Morning Walk' (Buddy) vs 'Morning Feed' (Luna)`. Works across pets. Never raises an exception or blocks scheduling — it only reports.
+
+### Internal Cache
+- **Flat task cache** — `Scheduler` maintains a `_task_cache` list rebuilt after every add, remove, or completion. All read methods query the cache instead of traversing the owner → pet → task hierarchy on every call, keeping reads fast while writes stay correct.
+
+---
+
 ## Smarter Scheduling
 
 The `Scheduler` class has been extended with four new features beyond basic task listing:
@@ -79,6 +112,11 @@ python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
+
+### Demo
+<a href="course_images/ai110/pawpal+.png" target="_blank">
+    <img src='course_images/ai110/pawpal+.png' title='PawPal App' width='600' alt='PawPal App' class='center-block' />
+</a>
 
 ### Suggested workflow
 
