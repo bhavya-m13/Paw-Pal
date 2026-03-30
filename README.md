@@ -42,6 +42,34 @@ The new task is added to the same pet and the internal cache is rebuilt immediat
 [CONFLICT] 2026-03-30 08:00 — 'Morning Walk' (Buddy) vs 'Morning Feeding' (Luna)
 ```
 
+## Testing PawPal+
+
+### Running the tests
+
+```bash
+python -m pytest tests/test_pawpal.py -v
+```
+
+### What the tests cover
+
+The suite contains **23 tests** across 5 classes:
+
+| Class | What is verified |
+|---|---|
+| `TestTaskCompletion` | `mark_complete()` sets `is_completed` and records `completed_at`; incomplete tasks have no timestamp |
+| `TestTaskAddition` | Adding tasks increases the count and makes them retrievable via `get_tasks()` |
+| `TestSortByTime` | Tasks are returned in chronological HH:MM order; empty lists and single-task lists are handled; sort is stable across equal times |
+| `TestRecurrenceLogic` | Daily/weekly tasks auto-create the next occurrence on completion; the cloned task inherits `frequency`; chaining works across 3+ completions; one-time tasks return `None`; missing IDs return `None` |
+| `TestConflictDetection` | Two or more tasks at the exact same timestamp are flagged; the warning contains all task titles and the timestamp; tasks at different times produce no conflicts; empty input returns an empty list |
+
+### Confidence Level
+
+**4 / 5 stars**
+
+The core domain logic — task completion, recurring scheduling, time-of-day sorting, and conflict detection — is fully exercised and all 23 tests pass. One star is withheld because the UI layer (`app.py`) and Streamlit session-state interactions are not covered by automated tests, so regressions there would only surface manually.
+
+---
+
 ## Getting started
 
 ### Setup
