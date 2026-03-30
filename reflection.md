@@ -38,6 +38,7 @@ Yes. I asked Claude to review my skeleton and asked if  it notices any missing r
 
 - Describe one tradeoff your scheduler makes.
 - Why is that tradeoff reasonable for this scenario?
+The algorithmic method that Claude suggested fixing is mark_task_complete() in paw_pal_system.py lines 128-171. The problem was that the nested break command didn't actually break all three featured loops. After finding the match, Python exits the task loop but continues iterating every remaining pet and owner. For a small pet list this is harmless, but it's a logic bug that scales poorly and reads incorrectly. The code looks like it stops early and it looks incomplete. The fix for this is, as suggested by AI, was to use python's next() command with a generator expression to short circuit the exact point in time where the first match is found across all three loops. This tradeoff is reasonable because it makes sure there are no wasted iterations and the intent is expressed directly. 
 
 ---
 
